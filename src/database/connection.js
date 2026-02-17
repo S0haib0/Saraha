@@ -1,8 +1,6 @@
 import mongoose from "mongoose";
-
 import { env } from "../../config/index.js";
-import { log } from "node:console";
-log(env.mongoURL);
+console.log(env.mongoURL);
 export const databaseConnection = async () => {
   await mongoose
     .connect(env.mongoURL)

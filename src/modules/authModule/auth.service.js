@@ -8,6 +8,8 @@ import { findById, findOne } from "../../database/database.service.js";
 import { userModel } from "../../database/index.js";
 import { generateHash, compareHash } from "../../common/index.js";
 import jwt from "jsonwebtoken";
+import { env } from "../../../config/index.js";
+import { decodeRefreshToken } from "../../common/security/security.js";
 
 export const signup = async (data) => {
   let { userName, email, password } = data;
@@ -48,4 +50,22 @@ export const getUserById = async (headers) => {
   let decoded = jwt.verify(authorization, "route");
   let userData = await findById({ model: userModel, id: decoded.id });
   return userData;
+};
+
+export const generateAccessToken = (token) => {
+  let decodedData = decodeRefreshToken(token);
+  let signature = undefined;
+  switch (decodedData.aud) {
+    case "Admin":
+      signature = env.adminSignature;
+      break;
+    case "User":
+      signature = env.userSignature;
+      break;
+  }
+  let accessToken = jwt.sign({ id: decodedData.id }, signature, {
+    expiresIn: "30m",
+    audience: decodedData.aud,
+  });
+  return accessToken;
 };

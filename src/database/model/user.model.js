@@ -39,7 +39,7 @@ const userSchema = new mongoose.Schema({
 userSchema
   .virtual("userName")
   .set(function (value) {
-    let [firstName, lastName] = value.split("");
+    let [firstName, lastName] = value.split(" ");
     this.firstName = firstName;
     this.lastName = lastName;
   })

@@ -7,11 +7,14 @@ import authRouter from "./modules/authModule/auth.controller.js";
 export const bootstrap = async () => {
   const app = express();
   app.use(express.json());
-  app.use("auth", authRouter);
+  app.use("/auth", authRouter);
   await databaseConnection();
+  app.get("/", () => {
+    res.json("server is running");
+  });
   app.use("{*dummy}", (req, res) => res.status(404).json("invalid route"));
   app.use(globalErrorHandler);
-  app.listen(env.PORT, () => {
-    console.log(`Server is running on port 3000`);
+  app.listen(env.port, () => {
+    console.log(`Server is running on port ${env.port}`);
   });
 };

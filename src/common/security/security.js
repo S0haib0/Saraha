@@ -17,3 +17,8 @@ export const generateToken = (user) => {
   let token = jwt.sign({ id: user._id }, signature, { audience });
   return { token };
 };
+
+
+export const decodeRefreshToken= ()=>{
+  
+}

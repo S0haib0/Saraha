@@ -1,7 +1,13 @@
 import { Router } from "express";
-import { generateAccessToken, getUserById, login, signup } from "./auth.service.js";
+import {
+  generateAccessToken,
+  getUserById,
+  login,
+  signup,
+} from "./auth.service.js";
 import { SuccessResponse } from "../../common/utils/responses/success.response.js";
 import multer from "multer";
+import { auth } from "../../common/middleware/auth.js";
 
 const upload = multer({ dest: "uploads/" });
 const router = Router();
@@ -18,12 +24,12 @@ router.post("/login", async (req, res) => {
     data: loginUser,
   });
 });
-router.get("/get-user-by-id", async (req, res) => {
-  let userData = await getUserById(req.headers);
+router.get("/get-user-by-id", auth, async (req, res) => {
+  let userData = await getUserById(req.userId);
   res.json(userData);
 });
 
-router.get("/generate-access=token", async (req, res) => {
+router.get("/generate-access-token", async (req, res) => {
   let { authorization } = req.headers;
   let accessToken = await generateAccessToken(authorization);
   return SuccessResponse({

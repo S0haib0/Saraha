@@ -19,6 +19,16 @@ export const generateToken = (user) => {
 };
 
 
-export const decodeRefreshToken= ()=>{
-  
+export const decodeToken = (token,decoded)=>{
+  let signature = undefined;
+  switch (decoded.aud) {
+    case "Admin":
+      signature = env.adminSignature;
+      break;
+    default:
+      signature = env.userSignature;
+      break;
+  }
+  let decodedData = jwt.verify(token, signature);
+  return decodedData;
 }

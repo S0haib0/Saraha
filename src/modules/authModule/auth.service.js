@@ -9,10 +9,7 @@ import { userModel } from "../../database/index.js";
 import { generateHash, compareHash } from "../../common/index.js";
 import jwt from "jsonwebtoken";
 import { env } from "../../../config/index.js";
-import {
-  decodeToken,
-  generateToken,
-} from "../../common/security/security.js";
+import { decodeToken, generateToken } from "../../common/security/security.js";
 
 export const signup = async (data) => {
   let { userName, email, password } = data;
@@ -31,10 +28,12 @@ export const signup = async (data) => {
 
 export const login = async (data) => {
   let { email, password } = data;
+
   let existUser = await findOne({
     model: userModel,
     filter: { email, provider: providerEnums.System },
   });
+
   if (existUser) {
     let { token } = generateToken(existUser);
     const isMatched = await compareHash(password, existUser.password);

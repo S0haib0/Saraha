@@ -35,22 +35,22 @@ export const login = async (data) => {
   });
 
   if (existUser) {
-    let { token } = generateToken(existUser);
+    let { token, refreshToken } = generateToken(existUser);
     const isMatched = await compareHash(password, existUser.password);
     if (isMatched) {
-      return { existUser, token };
+      return { existUser, token, refreshToken };
     }
   }
   return NotFoundException({ message: "user not found" });
 };
 
-export const getUserById = async (userId) => {
+export const getUserById = async (headers) => {
   let userData = await findById({ model: userModel, id: userId });
   return userData;
 };
 
-export const generateAccessToken = (token) => {
-  let decodedData = decodeRefreshToken(token);
+export const generateAccessToken = (refreshToken) => {
+  let decodedData = decodeRefreshToken(refreshToken);
   let signature = undefined;
   switch (decodedData.aud) {
     case "Admin":

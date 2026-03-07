@@ -14,7 +14,7 @@ export const auth = (req, res, next) => {
       let [email, password] = data.split(":");
       break;
     case "Bearer":
-      let decodedData = decodeToken(authorization, decoded);
+      let decodedData = decodeToken(token);
       req.userId = decodedData.id;
       next();
     default:

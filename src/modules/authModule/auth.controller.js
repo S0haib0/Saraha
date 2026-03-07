@@ -33,14 +33,21 @@ router.get("/get-user-by-id", auth, async (req, res) => {
   res.json(userData);
 });
 
-router.get("/generate-access-token", async (req, res) => {
-  let { authorization } = req.headers;
-  let accessToken = await generateAccessToken(authorization);
+router.get("/get-access-token", async (req, res) => {
+  let accessToken = await generateAccessToken(req.headers.authorization);
   return SuccessResponse({
     res,
     message: "access token created",
     status: 200,
     data: accessToken,
+  });
+});
+router.post("/signup/gmail", async (req, res) => {
+  const data = await signupMail(req.body);
+  return SuccessResponse({
+    res,
+    message: "user added with gmail",
+    status: 200,
   });
 });
 

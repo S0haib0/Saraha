@@ -9,7 +9,6 @@ export const generateToken = (user) => {
     case "0":
       signature = env.adminSignature;
       refreshSignature = env.refreshAdminSignature;
-      console.log(refreshSignature, "aloo");
       audience = "Admin";
       break;
     default:

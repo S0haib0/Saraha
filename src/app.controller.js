@@ -3,11 +3,13 @@ import { env } from "../config/env.service.js";
 import { databaseConnection } from "./database/index.js";
 import { globalErrorHandler } from "./common/utils/responses/index.js";
 import authRouter from "./modules/authModule/auth.controller.js";
+import messageRouter from "./modules/messages/messages.controller.js";
 
 export const bootstrap = async () => {
   const app = express();
   app.use(express.json());
   app.use("/auth", authRouter);
+  app.use("/messages", messageRouter);
   await databaseConnection();
   app.get("/", () => {
     res.json("server is running");

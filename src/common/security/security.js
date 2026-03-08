@@ -8,12 +8,13 @@ export const generateToken = (user) => {
   switch (user.role) {
     case "0":
       signature = env.adminSignature;
-      refreshSignature = env.adminRefreshSignature;
+      refreshSignature = env.refreshAdminSignature;
+      console.log(refreshSignature, "aloo");
       audience = "Admin";
       break;
     default:
       signature = env.userSignature;
-      refreshSignature = env.userRefreshSignature;
+      refreshSignature = env.refreshUserSignature;
       audience = "User";
       break;
   }

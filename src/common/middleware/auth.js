@@ -1,6 +1,4 @@
 import { UnauthorizedException } from "../utils/responses/error.response.js";
-import jwt from "jsonwebtoken";
-import { env } from "../../../config/index.js";
 import { decodeToken } from "../security/security.js";
 export const auth = (req, res, next) => {
   let { authorization } = req.headers;

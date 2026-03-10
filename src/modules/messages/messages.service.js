@@ -8,12 +8,18 @@ import {
   findOneAndDelete,
   insertOne,
 } from "../../database/database.service.js";
+import { userModel } from "../../database/index.js";
+import { env } from "../../../config/index.js";
 
-export const sendMessage = async (data, userId) => {
-  let { message, image } = data;
+export const sendMessage = async (body, userId, file) => {
+  let { message } = data;
   let existUser = await findById({ model: userModel, id: userId });
   if (!existUser) {
     throw BadRequestException({ message: "User not found" });
+  }
+  let image = "";
+  if (file) {
+    image = `${env.baseURl}/upload${file.filename}`;
   }
   let newMessage = await insertOne({
     model: messageModel,
@@ -62,6 +68,6 @@ export const deleteMessageById = async (messageId, userId) => {
   if (!deletedMessage) {
     throw BadRequestException({ message: "Message not found" });
   } else {
-    return deletedMessage;  
+    return deletedMessage;
   }
 };

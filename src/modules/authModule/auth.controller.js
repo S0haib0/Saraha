@@ -6,19 +6,27 @@ import {
   signup,
 } from "./auth.service.js";
 import { SuccessResponse } from "../../common/utils/responses/success.response.js";
-import multer from "multer";
 import { auth } from "../../common/middleware/auth.js";
-import joi from "joi";
-import { BadRequestException } from "../../common/utils/responses/error.response.js";
 import { loginSchema, signupSchema } from "./auth.validation.js";
 import { validation } from "../../common/utils/validation.js";
-const upload = multer({ dest: "uploads/" });
+import { multer_local } from "../../common/middleware/multer.js";
+
 const router = Router();
 
-router.post("/signup", validation(signupSchema), async (req, res) => {
-  let addedUser = await signup(req.body);
-  SuccessResponse({ res, message: "user added", status: 201, data: addedUser });
-});
+router.post(
+  "/signup",
+  multer_local().single("image"),
+  validation(signupSchema),
+  async (req, res) => {
+    let addedUser = await signup(req.body, req.file);
+    SuccessResponse({
+      res,
+      message: "user added",
+      status: 201,
+      data: addedUser,
+    });
+  },
+);
 router.post("/login", validation(loginSchema), async (req, res) => {
   let loginUser = await login(req.body);
   SuccessResponse({

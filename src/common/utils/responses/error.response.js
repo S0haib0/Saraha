@@ -72,7 +72,7 @@ export const globalErrorHandler = (error, req, res, next) => {
   const mood = env.mood == "dev";
   const deafultMessage = "Something went wrong";
   const displayErrorMessage = error.message || deafultMessage;
-  const extra = error.extra || {};
+  const extra = error.cause?.extra || {};
   res.status(status).json({
     status,
     stack: mood ? error.stack : null,

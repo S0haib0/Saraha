@@ -8,16 +8,15 @@ const messageSchema = new mongoose.Schema({
     maxLength: 500,
   },
   receiver: {
-    type: new mongoose.Types.ObjectId(),
+    type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,
   },
   image: {
     type: String,
-    required: false,
   },
   userId: {
-    type: new mongoose.Types.ObjectId(),
+    type: mongoose.Schema.Types.ObjectId,
     required: false,
   },
 });

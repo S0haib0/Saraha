@@ -27,6 +27,11 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  shareProfile: {
+    type: String,
+    required: true,
+    unique: true,
+  },
   phone: String,
   DOB: Date,
   gender: {

@@ -11,17 +11,22 @@ import jwt from "jsonwebtoken";
 import { env } from "../../../config/index.js";
 import { decodeToken, generateToken } from "../../common/security/security.js";
 
-export const signup = async (data) => {
-  let { userName, email, password } = data;
+export const signup = async (data, file) => {
+  let { userName, email, password, shareProfile } = data;
   let existUser = await findOne({ model: userModel, filter: { email } });
   if (existUser) {
     return ConflictException({ message: "user already exists" });
+  }
+  let image = "";
+  if (file) {
+    image = `${env.baseURl}/uploads/${file.filename}`;
   }
   let hashedPassword = await generateHash(password);
   let addedUser = await userModel.insertOne({
     userName,
     email,
     password: hashedPassword,
+    shareProfile,image
   });
   return addedUser;
 };

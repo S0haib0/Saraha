@@ -10,6 +10,7 @@ const userSignature = process.env.JWT_USER_SIGNATURE;
 const jwt_key = process.env.JWT_KEY;
 const refreshAdminSignature = process.env.JWT_REFRESH_ADMIN_SIGNATURE;
 const refreshUserSignature = process.env.JWT_REFRESH_USER_SIGNATURE;
+const baseURl = process.env.BASE_URL;
 export const env = {
   port,
   mongoURL,
@@ -20,4 +21,5 @@ export const env = {
   jwt_key,
   refreshAdminSignature,
   refreshUserSignature,
+  baseURl,
 };

@@ -8,18 +8,29 @@ import {
 } from "./messages.service.js";
 import { validation } from "../../common/utils/validation.js";
 import { auth } from "../../common/middleware/auth.js";
+import { multer_local } from "../../common/middleware/multer.js";
+import { sendMessageSchema } from "./messages.validation.js";
 
 const router = Router();
 
-router.post("/send/:id", validation(sendMessageSchema), async (req, res) => {
-  let sentMessage = await sendMessage(req.body, req.params.id);
-  SuccessResponse({
-    res,
-    message: "Message sent successfully",
-    statusCode: 200,
-    data: sentMessage,
-  });
-});
+router.post(
+  "/send/:receiver",
+  multer_local({ customPath: "profile" }).single("image"),
+  validation(sendMessageSchema),
+  async (req, res) => {
+    let sentMessage = await sendMessage(
+      req.body,
+      req.params.receiver,
+      req.file,
+    );
+    SuccessResponse({
+      res,
+      message: "Message sent successfully",
+      statusCode: 200,
+      data: sentMessage,
+    });
+  },
+);
 
 router.get("/get-all-messages", auth, async (req, res) => {
   let messages = await getAllMessages(req.user.id);
@@ -39,7 +50,7 @@ router.get("get-message-by-id", auth, async (req, res) => {
     data: message,
   });
 });
-router.delete("delete-message/:id",auth , async (req, res) => {
+router.delete("delete-message/:id", auth, async (req, res) => {
   let deletedMessage = await deleteMessageById(req.params.id, req.user.id);
   SuccessResponse({
     res,
@@ -48,4 +59,8 @@ router.delete("delete-message/:id",auth , async (req, res) => {
     data: deletedMessage,
   });
 });
+(router.post("/single", multer_local().single("image")),
+  (req, res) => {
+    res.status(200).json({ msg: "done", file: req.file });
+  });
 export default router;

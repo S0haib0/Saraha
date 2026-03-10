@@ -3,13 +3,17 @@ import {
   generateAccessToken,
   getUserById,
   login,
+  logout,
   signup,
+  signupMail,
+  verifyEmail,
 } from "./auth.service.js";
 import { SuccessResponse } from "../../common/utils/responses/success.response.js";
 import { auth } from "../../common/middleware/auth.js";
 import { loginSchema, signupSchema } from "./auth.validation.js";
 import { validation } from "../../common/utils/validation.js";
 import { multer_local } from "../../common/middleware/multer.js";
+import { BadRequestException } from "../../common/utils/responses/error.response.js";
 
 const router = Router();
 
@@ -27,6 +31,14 @@ router.post(
     });
   },
 );
+router.post("/verify", async (req, res) => {
+  let data = await verifyEmail(req.body);
+  if (data) {
+    SuccessResponse({ res, message: "email verified", status: 200 ,data});
+  }else{
+    return BadRequestException({message:"invalid code"})
+  }
+});
 router.post("/login", validation(loginSchema), async (req, res) => {
   let loginUser = await login(req.body);
   SuccessResponse({
@@ -57,6 +69,11 @@ router.post("/signup/gmail", async (req, res) => {
     message: "user added with gmail",
     status: 200,
   });
+});
+
+router.post("/logout", auth, async (req, res) => {
+  let logout = await logout(req);
+  return SuccessResponse({ res, message: "logged out" });
 });
 
 export default router;

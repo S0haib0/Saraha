@@ -49,6 +49,10 @@ const userSchema = new mongoose.Schema({
     enum: Object.values(roleEnums),
     default: roleEnums.User,
   },
+  isVerified: {
+    type: Boolean,
+    default: false,
+  },
 });
 userSchema
   .virtual("userName")

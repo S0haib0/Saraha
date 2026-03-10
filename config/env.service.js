@@ -11,6 +11,10 @@ const jwt_key = process.env.JWT_KEY;
 const refreshAdminSignature = process.env.JWT_REFRESH_ADMIN_SIGNATURE;
 const refreshUserSignature = process.env.JWT_REFRESH_USER_SIGNATURE;
 const baseURl = process.env.BASE_URL;
+const redisURI = process.env.REDIS_URI;
+const appPassword = process.env.APP_PASSWORD;
+const appGmail = process.env.APP_GMAIL;
+
 export const env = {
   port,
   mongoURL,
@@ -22,4 +26,7 @@ export const env = {
   refreshAdminSignature,
   refreshUserSignature,
   baseURl,
+  redisURI,
+  appPassword,
+  appGmail,
 };

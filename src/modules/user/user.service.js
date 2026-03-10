@@ -6,9 +6,17 @@ import {
 } from "../../database/database.service.js";
 import { BadRequestException } from "../../common/utils/responses/error.response.js";
 import { env } from "../../../config/index.js";
+import { get, set } from "../../database/redis.service.js";
 
+let genKey = (userId) => {
+  let redisKey = `userProfile::${userId}`;
+};
 export const getUserProfile = async (userId) => {
-  let userData = await findOne({
+  let userData = await get(genKey(userId));
+  if (userData) {
+    return userData;
+  }
+  userData = await findOne({
     model: userModel,
     filter: { _id: userId },
     select: "firstName lastName shareProfile image",
@@ -16,6 +24,7 @@ export const getUserProfile = async (userId) => {
   if (!userData) {
     throw BadRequestException({ message: "user not found" });
   }
+  await set({ key: genKey(userId), value: userData, ttl: 60 });
   return userData;
 };
 
@@ -64,6 +73,7 @@ export const updateProfile = async (userId, data, file) => {
   if (!existUser) {
     throw BadRequestException("user not found");
   }
+  await set({ key: genKey(userId), value: existUser, ttl: 60 });
   return existUser;
 };
 
